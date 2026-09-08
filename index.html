@@ -785,6 +785,7 @@ Museum Print Maker — Version 0.2
 
 
 <script>
+<script>
 
 const artworkInput = document.getElementById("artworkInput");
 
@@ -799,7 +800,7 @@ const imageRatio = document.getElementById("imageRatio");
 const imageResolution = document.getElementById("imageResolution");
 
 
-artworkInput.addEventListener("change", function() {
+artworkInput.addEventListener("change", function () {
 
     const file = this.files[0];
 
@@ -807,12 +808,19 @@ artworkInput.addEventListener("change", function() {
         return;
     }
 
+
+    // Show the selected filename
+
     fileStatus.textContent =
         file.name + " selected.";
 
+
+    // Create an image that the browser can inspect
+
     const image = new Image();
 
-    image.onload = function() {
+
+    image.onload = function () {
 
         const width = image.naturalWidth;
 
@@ -820,23 +828,80 @@ artworkInput.addEventListener("change", function() {
 
         const ratio = width / height;
 
+
+        // Display width
+
         imageWidth.textContent =
-            width + " px";
+            width.toLocaleString() + " px";
+
+
+        // Display height
 
         imageHeight.textContent =
-            height + " px";
+            height.toLocaleString() + " px";
+
+
+        // Display aspect ratio
 
         imageRatio.textContent =
-            ratio.toFixed(3);
+            calculateAspectRatio(width, height);
+
+
+        // Display original resolution
 
         imageResolution.textContent =
-            width + " × " + height + " px";
+            width.toLocaleString() +
+            " × " +
+            height.toLocaleString() +
+            " px";
+
+
+        // Release the temporary image URL
+
+        URL.revokeObjectURL(image.src);
 
     };
+
+
+    // Give the browser temporary access to the selected image
 
     image.src = URL.createObjectURL(file);
 
 });
+
+
+
+function calculateAspectRatio(width, height) {
+
+    const divisor = greatestCommonDivisor(width, height);
+
+    const ratioWidth = width / divisor;
+
+    const ratioHeight = height / divisor;
+
+    return ratioWidth + ":" + ratioHeight;
+
+}
+
+
+
+function greatestCommonDivisor(a, b) {
+
+    while (b !== 0) {
+
+        const temporary = b;
+
+        b = a % b;
+
+        a = temporary;
+
+    }
+
+    return a;
+
+}
+
+</script>
 
 </script>
 
