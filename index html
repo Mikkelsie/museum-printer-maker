@@ -1,0 +1,846 @@
+index.html
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Museum Print Maker</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f3f3;
+    color: #222;
+}
+
+.app {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
+header {
+    background: white;
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0 0 8px 0;
+}
+
+header p {
+    margin: 0;
+    color: #666;
+}
+
+.panel {
+    background: white;
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.panel h2 {
+    margin-top: 0;
+}
+
+.step-number {
+    display: inline-block;
+    background: #222;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    margin-right: 8px;
+}
+
+.upload-box {
+    display: block;
+    border: 2px dashed #999;
+    border-radius: 12px;
+    padding: 35px 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.upload-box:hover {
+    background: #fafafa;
+}
+
+.upload-box input {
+    display: none;
+}
+
+.upload-button {
+    display: inline-block;
+    margin-top: 15px;
+    background: #222;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+}
+
+.file-status {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f1f1f1;
+    border-radius: 8px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.info-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+}
+
+.info-card strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.option-group {
+    margin-bottom: 25px;
+}
+
+.option-group h3 {
+    margin-bottom: 8px;
+}
+
+.option-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+}
+
+.option {
+    border: 1px solid #ccc;
+    border-radius: 9px;
+    padding: 12px;
+    background: white;
+}
+
+.option strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+select,
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.note {
+    background: #f7f7f7;
+    border-left: 4px solid #555;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.warning {
+    background: #fff7e6;
+    border-left: 4px solid #d99a00;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+footer {
+    text-align: center;
+    color: #777;
+    padding: 20px;
+    font-size: 13px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+<header>
+
+<h1>Museum Print Maker</h1>
+
+<p>
+Prepare public-domain and open-access artwork
+for printable digital products.
+</p>
+
+</header>
+
+
+<!-- STEP 1 -->
+
+<div class="panel">
+
+<h2>
+<span class="step-number">1</span>
+Upload Artwork
+</h2>
+
+<p>
+Choose the original artwork file you want to prepare.
+</p>
+
+<label class="upload-box">
+
+<strong>Choose an artwork image</strong>
+
+<br>
+
+<span class="upload-button">
+Choose Image
+</span>
+
+<input
+    id="artworkInput"
+    type="file"
+    accept="image/jpeg,image/png,image/webp"
+>
+
+</label>
+
+<div class="file-status">
+
+<strong>File status:</strong>
+
+<span id="fileStatus">
+No artwork selected.
+</span>
+
+</div>
+
+</div>
+
+
+<!-- STEP 2 -->
+
+<div class="panel">
+
+<h2>
+<span class="step-number">2</span>
+Original Image Information
+</h2>
+
+<p>
+The Print Maker will read the original image information here.
+</p>
+
+<div class="info-grid">
+
+<div class="info-card">
+
+<strong>Width</strong>
+
+<span id="imageWidth">
+Not available
+</span>
+
+</div>
+
+
+<div class="info-card">
+
+<strong>Height</strong>
+
+<span id="imageHeight">
+Not available
+</span>
+
+</div>
+
+
+<div class="info-card">
+
+<strong>Aspect Ratio</strong>
+
+<span id="imageRatio">
+Not available
+</span>
+
+</div>
+
+
+<div class="info-card">
+
+<strong>Original Resolution</strong>
+
+<span id="imageResolution">
+Not analysed
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- STEP 3 -->
+
+<div class="panel">
+
+<h2>
+<span class="step-number">3</span>
+Print Sizes
+</h2>
+
+<p>
+Choose the print sizes you want your finished product to contain.
+</p>
+
+
+<div class="option-group">
+
+<h3>2:3 Ratio</h3>
+
+<div class="option-grid">
+
+<div class="option">
+<strong>4 × 6 in</strong>
+2:3
+</div>
+
+<div class="option">
+<strong>8 × 12 in</strong>
+2:3
+</div>
+
+<div class="option">
+<strong>12 × 18 in</strong>
+2:3
+</div>
+
+<div class="option">
+<strong>16 × 24 in</strong>
+2:3
+</div>
+
+<div class="option">
+<strong>20 × 30 in</strong>
+2:3
+</div>
+
+<div class="option">
+<strong>24 × 36 in</strong>
+2:3
+</div>
+
+</div>
+
+</div>
+
+
+<div class="option-group">
+
+<h3>3:4 Ratio</h3>
+
+<div class="option-grid">
+
+<div class="option">
+<strong>6 × 8 in</strong>
+3:4
+</div>
+
+<div class="option">
+<strong>9 × 12 in</strong>
+3:4
+</div>
+
+<div class="option">
+<strong>12 × 16 in</strong>
+3:4
+</div>
+
+<div class="option">
+<strong>18 × 24 in</strong>
+3:4
+</div>
+
+<div class="option">
+<strong>24 × 32 in</strong>
+3:4
+</div>
+
+</div>
+
+</div>
+
+
+<div class="option-group">
+
+<h3>4:5 Ratio</h3>
+
+<div class="option-grid">
+
+<div class="option">
+<strong>8 × 10 in</strong>
+4:5
+</div>
+
+<div class="option">
+<strong>12 × 15 in</strong>
+4:5
+</div>
+
+<div class="option">
+<strong>16 × 20 in</strong>
+4:5
+</div>
+
+<div class="option">
+<strong>24 × 30 in</strong>
+4:5
+</div>
+
+</div>
+
+</div>
+
+
+<div class="option-group">
+
+<h3>ISO A-Series</h3>
+
+<div class="option-grid">
+
+<div class="option">
+<strong>A5</strong>
+148 × 210 mm
+</div>
+
+<div class="option">
+<strong>A4</strong>
+210 × 297 mm
+</div>
+
+<div class="option">
+<strong>A3</strong>
+297 × 420 mm
+</div>
+
+<div class="option">
+<strong>A2</strong>
+420 × 594 mm
+</div>
+
+<div class="option">
+<strong>A1</strong>
+594 × 841 mm
+</div>
+
+</div>
+
+</div>
+
+
+<div class="note">
+
+<strong>Important:</strong>
+
+The finished image must never be stretched or distorted.
+The Print Maker will eventually crop or fit the artwork
+while preserving its original proportions.
+
+</div>
+
+</div>
+
+
+<!-- STEP 4 -->
+
+<div class="panel">
+
+<h2>
+<span class="step-number">4</span>
+Crop or Fit
+</h2>
+
+<p>
+Choose how the artwork should be prepared when its proportions
+do not exactly match the selected print size.
+</p>
+
+<select id="cropMode">
+
+<option value="crop">
+Crop to fill
+</option>
+
+<option value="fit">
+Fit artwork with white border
+</option>
+
+</select>
+
+
+<div class="note">
+
+<strong>Crop to fill:</strong>
+The artwork fills the entire print area,
+but some of the edges may be removed.
+
+<br><br>
+
+<strong>Fit with white border:</strong>
+The entire artwork is preserved,
+but white space may appear around it.
+
+</div>
+
+</div>
+
+
+<!-- STEP 5 -->
+
+<div class="panel">
+
+<h2>
+<span class="step-number">5</span>
+Output Resolution
+</h2>
+
+<p>
+Choose the resolution approach for the finished files.
+</p>
+
+<div class="option-grid">
+
+<div class="option">
+
+<strong>Original</strong>
+
+Use the original pixel dimensions.
+
+</div>
+
+
+<div class="option">
+
+<strong>1,800 px</strong>
+
+Increase the image to approximately
+1,800 pixels on its shortest side.
+
+</div>
+
+
+<div class="option">
+
+<strong>HD</strong>
+
+Prepare a maximum HD-sized image
+while preserving the artwork's proportions.
+
+</div>
+
+
+<div class="option">
+
+<strong>2× Original</strong>
+
+Increase the original pixel dimensions
+by two times.
+
+</div>
+
+
+<div class="option">
+
+<strong>4× Original</strong>
+
+Increase the original pixel dimensions
+by four times.
+
+</div>
+
+</div>
+
+
+<div class="warning">
+
+<strong>Important:</strong>
+
+Upscaling increases the number of pixels,
+but it does not create genuine new detail
+that was not present in the original artwork.
+
+There is no AI enhancement in this Print Maker.
+
+</div>
+
+</div>
+
+
+<!-- STEP 6 -->
+
+<div class="panel">
+
+<h2>
+<span class="step-number">6</span>
+Artwork Information
+</h2>
+
+<p>
+Enter information that will eventually be included
+with the finished product.
+</p>
+
+<label>
+Artwork title
+</label>
+
+<br><br>
+
+<input
+    type="text"
+    placeholder="Example: Botanical Study"
+>
+
+
+<br><br>
+
+
+<label>
+Artist
+</label>
+
+<br><br>
+
+<input
+    type="text"
+    placeholder="Example: Maria Smith"
+>
+
+
+<br><br>
+
+
+<label>
+Museum / Collection
+</label>
+
+<br><br>
+
+<input
+    type="text"
+    placeholder="Example: Smithsonian Open Access"
+>
+
+
+<br><br>
+
+
+<label>
+Source / Rights information
+</label>
+
+<br><br>
+
+<textarea
+    placeholder="Enter the museum source, public-domain information, licence information, and other credit details here."
+></textarea>
+
+</div>
+
+
+<!-- STEP 7 -->
+
+<div class="panel">
+
+<h2>
+<span class="step-number">7</span>
+Quality Check
+</h2>
+
+<p>
+The Print Maker will eventually check whether the selected
+print sizes are suitable for the original artwork.
+</p>
+
+<div class="info-grid">
+
+<div class="info-card">
+
+<strong>Print quality</strong>
+
+<span>
+Waiting for artwork
+</span>
+
+</div>
+
+
+<div class="info-card">
+
+<strong>Resolution warning</strong>
+
+<span>
+Not checked
+</span>
+
+</div>
+
+
+<div class="info-card">
+
+<strong>Crop warning</strong>
+
+<span>
+Not checked
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- STEP 8 -->
+
+<div class="panel">
+
+<h2>
+<span class="step-number">8</span>
+Generate Files
+</h2>
+
+<p>
+Later, this button will create the selected print-ready
+files automatically.
+</p>
+
+<button
+    type="button"
+    disabled
+    style="
+        padding:12px 20px;
+        border:none;
+        border-radius:8px;
+        background:#ccc;
+        color:#666;
+    "
+>
+Generate Print Files
+</button>
+
+<p class="note">
+
+The generation engine will be added in the next stages.
+We're building the application one working part at a time.
+
+</p>
+
+</div>
+
+
+<footer>
+
+Museum Print Maker — Version 0.2
+
+</footer>
+
+
+</div>
+
+
+<script>
+
+const artworkInput = document.getElementById("artworkInput");
+
+const fileStatus = document.getElementById("fileStatus");
+
+const imageWidth = document.getElementById("imageWidth");
+
+const imageHeight = document.getElementById("imageHeight");
+
+const imageRatio = document.getElementById("imageRatio");
+
+const imageResolution = document.getElementById("imageResolution");
+
+
+artworkInput.addEventListener("change", function() {
+
+    const file = this.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    fileStatus.textContent =
+        file.name + " selected.";
+
+    const image = new Image();
+
+    image.onload = function() {
+
+        const width = image.naturalWidth;
+
+        const height = image.naturalHeight;
+
+        const ratio = width / height;
+
+        imageWidth.textContent =
+            width + " px";
+
+        imageHeight.textContent =
+            height + " px";
+
+        imageRatio.textContent =
+            ratio.toFixed(3);
+
+        imageResolution.textContent =
+            width + " × " + height + " px";
+
+    };
+
+    image.src = URL.createObjectURL(file);
+
+});
+
+</script>
+
+
+</body>
+
+</html>
