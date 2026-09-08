@@ -1353,6 +1353,97 @@ cropModeSelect.addEventListener("change", function () {
     }
 
 });
+let isDraggingCrop = false;
+
+let cropStartX = 0;
+let cropStartY = 0;
+
+let cropBoxStartLeft = 0;
+let cropBoxStartTop = 0;
+
+
+cropBox.addEventListener("pointerdown", function (event) {
+
+    isDraggingCrop = true;
+
+    cropStartX = event.clientX;
+    cropStartY = event.clientY;
+
+    cropBoxStartLeft =
+        cropBox.offsetLeft;
+
+    cropBoxStartTop =
+        cropBox.offsetTop;
+
+    cropBox.setPointerCapture(event.pointerId);
+
+    event.preventDefault();
+
+});
+
+
+cropBox.addEventListener("pointermove", function (event) {
+
+    if (!isDraggingCrop) {
+        return;
+    }
+
+    const workspaceWidth =
+        cropWorkspace.clientWidth;
+
+    const workspaceHeight =
+        cropWorkspace.clientHeight;
+
+
+    const movementX =
+        event.clientX - cropStartX;
+
+    const movementY =
+        event.clientY - cropStartY;
+
+
+    let newLeft =
+        cropBoxStartLeft + movementX;
+
+    let newTop =
+        cropBoxStartTop + movementY;
+
+
+    const maxLeft =
+        workspaceWidth - cropBox.offsetWidth;
+
+    const maxTop =
+        workspaceHeight - cropBox.offsetHeight;
+
+
+    newLeft =
+        Math.max(0, Math.min(newLeft, maxLeft));
+
+    newTop =
+        Math.max(0, Math.min(newTop, maxTop));
+
+
+    cropBox.style.left =
+        newLeft + "px";
+
+    cropBox.style.top =
+        newTop + "px";
+
+});
+
+
+cropBox.addEventListener("pointerup", function () {
+
+    isDraggingCrop = false;
+
+});
+
+
+cropBox.addEventListener("pointercancel", function () {
+
+    isDraggingCrop = false;
+
+});
     
 </script>
 
