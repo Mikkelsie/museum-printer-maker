@@ -1092,7 +1092,179 @@ const printSizes = {
     }
 
 };
+const dpiOptions = document.querySelectorAll('input[name="dpi"]');
 
+const printSizeOptions = document.querySelectorAll('.print-size');
+
+const printQualityStatus =
+    document.getElementById("printQualityStatus");
+
+const resolutionWarning =
+    document.getElementById("resolutionWarning");
+
+const cropWarning =
+    document.getElementById("cropWarning");
+
+
+function getSelectedDPI() {
+
+    const selectedDPI =
+        document.querySelector('input[name="dpi"]:checked');
+
+    if (!selectedDPI) {
+        return 300;
+    }
+
+    return Number(selectedDPI.value);
+
+}
+
+
+function updateQualityCheck() {
+
+    const selectedSizes =
+        document.querySelectorAll('.print-size:checked');
+
+    if (!artworkInput.files[0]) {
+
+        printQualityStatus.textContent =
+            "Upload an artwork image first.";
+
+        resolutionWarning.textContent =
+            "Waiting for artwork.";
+
+        cropWarning.textContent =
+            "Not checked.";
+
+        return;
+    }
+
+
+    if (selectedSizes.length === 0) {
+
+        printQualityStatus.textContent =
+            "Select at least one print size.";
+
+        resolutionWarning.textContent =
+            "Waiting for print size.";
+
+        cropWarning.textContent =
+            "Not checked.";
+
+        return;
+    }
+
+
+    const dpi = getSelectedDPI();
+
+    const originalWidth =
+        Number(imageWidth.textContent.replace(/,/g, "").replace(" px", ""));
+
+    const originalHeight =
+        Number(imageHeight.textContent.replace(/,/g, "").replace(" px", ""));
+
+
+    let suitableCount = 0;
+
+    let warningCount = 0;
+
+
+    selectedSizes.forEach(function (sizeOption) {
+
+        const size = printSizes[sizeOption.value];
+
+        if (!size) {
+            return;
+        }
+
+
+        const requiredWidth =
+            Math.round(size.width * dpi);
+
+        const requiredHeight =
+            Math.round(size.height * dpi);
+
+
+        const originalLongSide =
+            Math.max(originalWidth, originalHeight);
+
+        const originalShortSide =
+            Math.min(originalWidth, originalHeight);
+
+        const requiredLongSide =
+            Math.max(requiredWidth, requiredHeight);
+
+        const requiredShortSide =
+            Math.min(requiredWidth, requiredHeight);
+
+
+        if (
+            originalLongSide >= requiredLongSide &&
+            originalShortSide >= requiredShortSide
+        ) {
+
+            suitableCount++;
+
+        } else {
+
+            warningCount++;
+
+        }
+
+    });
+
+
+    if (warningCount === 0) {
+
+        printQualityStatus.textContent =
+            "All selected sizes have sufficient original pixels.";
+
+        resolutionWarning.textContent =
+            "No resolution warning.";
+
+    } else {
+
+        printQualityStatus.textContent =
+            suitableCount +
+            " suitable, " +
+            warningCount +
+            " require upscaling.";
+
+        resolutionWarning.textContent =
+            warningCount +
+            " selected size(s) require more pixels than the original.";
+
+    }
+
+
+    resolutionWarning.title =
+        "The Print Maker can still create the requested file using interpolation, but this does not create genuine new artwork detail.";
+
+
+    cropWarning.textContent =
+        "Crop/fit analysis will be added next.";
+
+}
+
+
+printSizeOptions.forEach(function (option) {
+
+    option.addEventListener(
+        "change",
+        updateQualityCheck
+    );
+
+});
+
+
+dpiOptions.forEach(function (option) {
+
+    option.addEventListener(
+        "change",
+        updateQualityCheck
+    );
+
+});
 </script>
 
 
