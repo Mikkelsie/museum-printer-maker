@@ -341,7 +341,65 @@ Custom Crop
 </option>
 
 </select>
+<div id="customCropArea" style="display:none;">
 
+    <p>
+        <strong>Custom Crop</strong>
+    </p>
+
+    <p>
+        Move and resize the crop area to choose exactly
+        which part of the artwork you want to keep.
+    </p>
+
+    <div
+        id="cropWorkspace"
+        style="
+            position:relative;
+            width:100%;
+            max-width:700px;
+            margin:auto;
+            overflow:hidden;
+            background:#eee;
+        "
+    >
+
+        <img
+            id="cropImage"
+            style="
+                display:block;
+                width:100%;
+                height:auto;
+            "
+        >
+
+        <div
+            id="cropBox"
+            style="
+                position:absolute;
+                left:10%;
+                top:10%;
+                width:80%;
+                height:80%;
+                border:3px solid white;
+                box-sizing:border-box;
+                cursor:move;
+                box-shadow:0 0 0 9999px rgba(0,0,0,0.45);
+            "
+        >
+        </div>
+
+    </div>
+
+    <button
+        type="button"
+        id="applyCropButton"
+        style="margin-top:15px;"
+    >
+        Apply Crop
+    </button>
+
+</div>
 <div class="note">
 
 <strong>Crop to fill:</strong>
