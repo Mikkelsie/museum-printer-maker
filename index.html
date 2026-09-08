@@ -1326,6 +1326,34 @@ dpiOptions.forEach(function (option) {
     );
 
 });
+const customCropArea =
+    document.getElementById("customCropArea");
+
+const cropImage =
+    document.getElementById("cropImage");
+
+
+cropModeSelect.addEventListener("change", function () {
+
+    if (this.value === "custom") {
+
+        customCropArea.style.display = "block";
+
+        if (artworkInput.files[0]) {
+
+            cropImage.src =
+                URL.createObjectURL(artworkInput.files[0]);
+
+        }
+
+    } else {
+
+        customCropArea.style.display = "none";
+
+    }
+
+});
+    
 </script>
 
 
